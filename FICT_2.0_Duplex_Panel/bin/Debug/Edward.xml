@@ -1,0 +1,244 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Edward</name>
+    </assembly>
+    <members>
+        <member name="T:Edward.DES">
+            <summary>
+            DES加密解密算法
+            </summary>
+        </member>
+        <member name="M:Edward.DES.DesEncrypt(System.String,System.String)">
+            <summary>
+            DES加密算法
+            sKey为8位或16位
+            </summary>
+            <param name="pToEncrypt">需要加密的字符串</param>
+            <param name="sKey">密钥,8位,如Edward86</param>
+            <returns></returns>
+        </member>
+        <member name="M:Edward.DES.DesDecrypt(System.String,System.String)">
+            <summary>
+            DES解密算法
+            sKey为8位或16位
+            </summary>
+            <param name="pToDecrypt">需要解密的字符串</param>
+            <param name="sKey">密钥,8位,如Edward86</param>
+            <returns></returns>
+        </member>
+        <member name="T:Edward.FN422">
+            <summary>
+            FN 422 serial port 
+            </summary>
+        </member>
+        <member name="M:Edward.FN422.ConverString(System.String,System.Int32,System.Int32)">
+            <summary>
+            進制轉換
+            </summary>
+            <param name="value">需要轉換的值</param>
+            <param name="fromBase">原進制</param>
+            <param name="toBase">需要轉換的進制</param>
+            <returns>返回的結果</returns>
+        </member>
+        <member name="M:Edward.FN422.GetAddress(System.String)">
+            <summary>
+            change PLC address device to the group address device
+            </summary>
+            <param name="oriAddress">原始地址</param>
+            <returns>轉換后的地址</returns>
+        </member>
+        <member name="M:Edward.FN422.GetSum(System.String)">
+            <summary>
+            獲取校驗碼，不包含命令頭
+            </summary>
+            <param name="allStr">不包含命令頭的數據</param>
+            <returns></returns>
+        </member>
+        <member name="M:Edward.FN422.GetSum(System.String,System.Boolean)">
+            <summary>
+            獲取校驗碼，不包含命令頭
+            </summary>
+            <param name="allStr">不包含命令頭的數據</param>
+            <param name="headFlag">含有命令頭,true；不含有命令頭,false</param>
+            <returns></returns>
+        </member>
+        <member name="M:Edward.FN422.Check422SendStatus(System.IO.Ports.SerialPort)">
+            <summary>
+            check 422 serial send status
+            </summary>
+            <param name="sp">serial port</param>
+            <returns>return string ,OK or NG</returns>
+        </member>
+        <member name="M:Edward.FN422.Check422SendStatus(System.String)">
+            <summary>
+            check 422 serial send status
+            </summary>
+            <param name="s">422 serial port return value</param>
+            <returns>return string ,OK or NG</returns>
+        </member>
+        <member name="T:Edward.IniFile">
+            <summary>
+            INI文件的操作类
+            </summary>
+        </member>
+        <member name="F:Edward.IniFile.iniFilePathValue">
+            <summary>
+            ini file path value
+            </summary>
+        </member>
+        <member name="M:Edward.IniFile.IniWriteValue(System.String,System.String,System.String,System.String)">
+            <summary>
+            写INI文件
+            </summary>
+            <param name="section">段落</param>
+            <param name="key">键</param>
+            <param name="iValue">值</param>
+            <param name="filePath">ini文件地址</param>
+        </member>
+        <member name="M:Edward.IniFile.IniWriteValue(System.String,System.String,System.String)">
+            <summary>
+             Write INI File
+            </summary>
+            <param name="section">段落</param>
+            <param name="key">键</param>
+            <param name="iValue">值</param>
+        </member>
+        <member name="M:Edward.IniFile.IniReadValue(System.String,System.String,System.String)">
+            <summary>
+            读取INI文件
+            </summary>
+            <param name="section">段落</param>
+            <param name="key">键</param>
+            <param name="filePath">ini文件的地址</param>      
+        </member>
+        <member name="M:Edward.IniFile.IniReadValue(System.String,System.String)">
+            <summary>
+            读取INI文件
+            </summary>
+            <param name="section">段落</param>
+            <param name="key">键</param>
+        </member>
+        <member name="M:Edward.IniFile.CreateIniFile(System.String)">
+            <summary>
+            create ini file
+            </summary>
+            <param name="filePath">ini file path</param>
+        </member>
+        <member name="M:Edward.IniFile.CreateIniFile">
+            <summary>
+            create ini file
+            </summary>
+        </member>
+        <member name="P:Edward.IniFile.IniFilePath">
+            <summary>
+            set/get ini file path value
+            </summary>
+        </member>
+        <member name="T:Edward.LockFileException">
+            <summary>
+            异常处理类
+            </summary>
+        </member>
+        <member name="T:Edward.LockFile">
+            <summary>
+            加密解密文件
+            </summary>
+        </member>
+        <member name="M:Edward.LockFile.CheckByteArrays(System.Byte[],System.Byte[])">
+            <summary>
+            检验两个Byte数组是否相同
+            </summary>
+            <param name="b1">Byte数组</param>
+            <param name="b2">Byte数组</param>
+            <returns>true－相等</returns>
+        </member>
+        <member name="M:Edward.LockFile.CreateRijndael(System.String,System.Byte[])">
+            <summary>
+            创建Rijndael SymmetricAlgorithm
+            </summary>
+            <param name="password">密码</param>
+            <param name="salt"></param>
+            <returns>加密对象</returns>
+        </member>
+        <member name="F:Edward.LockFile.rand">
+            <summary>
+            加密文件随机数生成
+            </summary>
+        </member>
+        <member name="M:Edward.LockFile.GenerateRandomBytes(System.Int32)">
+            <summary>
+            生成指定长度的随机Byte数组
+            </summary>
+            <param name="count">Byte数组长度</param>
+            <returns>随机Byte数组</returns>
+        </member>
+        <member name="M:Edward.LockFile.EncryptFile(System.String,System.String,System.String)">
+            <summary>
+            加密文件
+            </summary>
+            <param name="inFile">待加密文件</param>
+            <param name="outFile">加密后输入文件</param>
+            <param name="password">加密密码</param>
+        </member>
+        <member name="M:Edward.LockFile.DecryptFile(System.String,System.String,System.String)">
+            <summary>
+            解密文件
+            </summary>
+            <param name="inFile">待解密文件</param>
+            <param name="outFile">解密后输出文件</param>
+            <param name="password">解密密码</param>
+        </member>
+        <member name="T:Edward.Other">
+            <summary>
+            其他一些常用操作
+            </summary>
+        </member>
+        <member name="M:Edward.Other.checkTime(System.String)">
+            <summary>
+            check time
+            </summary>
+            <param name="str">encrpt date</param>
+            <returns></returns>
+        </member>
+        <member name="M:Edward.Other.pingIp(System.String)">
+            <summary>
+            ping一個IP地址,看是否能連接通
+            </summary>
+            <param name="address">IP地址</param>
+            <returns>ping通返回True,ping不通返回false</returns>
+        </member>
+        <member name="M:Edward.Other.Chr(System.Int32)">
+            <summary>
+            convert the asc code to character
+            </summary>
+            <param name="asciiCode"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Edward.Other.Asc(System.String)">
+            <summary>
+            convert the character to Asc code
+            </summary>
+            <param name="character"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Edward.WaterTextBox">
+            <summary>
+            为textbox添加水印
+            </summary>
+        </member>
+        <member name="M:Edward.WaterTextBox.SetWatermark(System.Windows.Forms.TextBox,System.String)">
+            <summary>
+            为TextBox设置水印文字
+            </summary>
+            <param name="textBox">TextBox</param>
+            <param name="watermark">水印文字</param>
+        </member>
+        <member name="M:Edward.WaterTextBox.ClearWatermark(System.Windows.Forms.TextBox)">
+            <summary>
+            清除水印文字
+            </summary>
+            <param name="textBox">TextBox</param>
+        </member>
+    </members>
+</doc>
