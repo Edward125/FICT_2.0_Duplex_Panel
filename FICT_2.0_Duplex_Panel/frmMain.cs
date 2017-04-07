@@ -114,6 +114,12 @@ namespace FICT_2._0_Duplex_Panel
         bool _b_MB_A_Re = false;//false:重复上电还没上电,true：重复上电已经上过了
         bool _b_MB_B_Re = false;//false:重复上电还没上电,true：重复上电已经上过了
 
+
+
+        //
+        string esModel = "KS13_CHR";//特殊機種，自動指定分配條碼 
+
+
         #endregion
 
         private void frmMain_Load(object sender, EventArgs e)
@@ -4670,25 +4676,41 @@ namespace FICT_2._0_Duplex_Panel
                             SubFunction.updateMessage(lstStatusCommand, "Read Barcode=" + USN);
                             SubFunction.saveLog(Param.logType.SYSLOG.ToString(), "Read Barcode=" + USN);
 
-                            if (Param.BarcodeType == Param.barcodeType.A.ToString()) Param.bar_A = USN;
-                            if (Param.BarcodeType == Param.barcodeType.B.ToString()) Param.bar_B = USN;
+                            string modelName = string.Empty;
+                            string modelPN = string.Empty;
+                            getModelNameInfo(USN, out modelName, out modelPN);
+                            if (modelName.ToUpper().Trim() == esModel.ToUpper())
+                            {
 
-                            //Channing 20161105
-                            Param.Model = string.Empty; //清空
-                            Param.ModelFamily = string.Empty;//清空
-                            Param.MO = string.Empty;//清空
-                            Param.UPN = string.Empty;//清空
-                            getMOModelUPN(Param.Web_Site, USN, ref Param.Model,ref  Param.ModelFamily,ref  Param.MO, ref Param.UPN);
-                            
-                            Update_MB_Info();  //上传MB信息至记录数据库；
-                            Param.Test_Log = true;  //TestLog 写入标志位，True：还未记录，Flase：已完成记录
 
-                            //从SFCS获取条码 
-                           
-                            // if (Param.MBType.ToString() == Param.mbType.Panel.ToString().ToUpper())
-                            // {
-                            getDynamicData(Param.Web_Site, USN, Param.BarcodeType);
-                            //}
+
+
+                            }
+                            else
+                            {
+
+                                if (Param.BarcodeType == Param.barcodeType.A.ToString()) Param.bar_A = USN;
+                                if (Param.BarcodeType == Param.barcodeType.B.ToString()) Param.bar_B = USN;
+
+                                //Channing 20161105
+                                Param.Model = string.Empty; //清空
+                                Param.ModelFamily = string.Empty;//清空
+                                Param.MO = string.Empty;//清空
+                                Param.UPN = string.Empty;//清空
+                                getMOModelUPN(Param.Web_Site, USN, ref Param.Model, ref  Param.ModelFamily, ref  Param.MO, ref Param.UPN);
+
+                                Update_MB_Info();  //上传MB信息至记录数据库；
+                                Param.Test_Log = true;  //TestLog 写入标志位，True：还未记录，Flase：已完成记录
+
+                                //从SFCS获取条码 
+                                // if (Param.MBType.ToString() == Param.mbType.Panel.ToString().ToUpper())
+                                // {
+                                getDynamicData(Param.Web_Site, USN, Param.BarcodeType);
+                                //}
+                            }
+
+
+                         
                             this.txtBar_A.Text = Param.bar_A;
                             this.txtBar_B.Text = Param.bar_B;
 
