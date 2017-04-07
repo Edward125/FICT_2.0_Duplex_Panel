@@ -125,6 +125,8 @@ namespace FICT_2._0_Duplex_Panel
 
             //this.lblStationResult.Text = Param.StationStatus.离线.ToString();
 
+
+
             foreach (string ip in SubFunction.getIP(Dns.GetHostName(), Param.IPType.IPV4.ToString()))
             {
                 this.Text = exeTitle + ",本地IP:" + ip;
@@ -1371,6 +1373,7 @@ namespace FICT_2._0_Duplex_Panel
             }
 
         }
+        
 
         /// <summary>
         /// 从条码列中将条码分離出來
@@ -1398,6 +1401,74 @@ namespace FICT_2._0_Duplex_Panel
                     Param.bar_A = Param.bar_A.Replace(",", string.Empty);
             }
         }
+
+
+
+        /// <summary>
+        /// 獲取系統內雙連板的A條碼和B條碼
+        /// </summary>
+        /// <param name="website">webservice site </param>
+        /// <param name="queryusn">query sn </param>
+        private void getDoubleMBSN(string website, string queryusn)
+        {
+           
+
+        }
+
+
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// 
+        /// <param name="queryusn"></param>
+        /// <param name="modelname"></param>
+        /// <param name="mbpn"></param>
+        private void getModelNameInfo( string queryusn, out string modelname, out string mbpn)
+        {
+            modelname = string.Empty;
+            mbpn = string.Empty;
+           
+
+            Stopwatch sw = new Stopwatch();
+            TimeSpan ts = new TimeSpan();
+            sw.Start();
+            SubFunction.updateMessage(lstStatusCommand, "SFCS:" + queryusn  + ",get ModelName & ModelFamily.");
+            SubFunction.saveLog(Param.logType.SYSLOG.ToString(), "SFCS:" + queryusn + ",get ModelName & ModelFamily.");
+            PcbWeb.clsRequestData reqData = new PcbWeb.clsRequestData();
+            reqData = ws.GetUUTData(queryusn, "TD", reqData, 1);
+            
+            sw.Stop();
+            ts = sw.Elapsed;
+            if (reqData != null )
+            {
+                modelname = reqData.Model;
+                mbpn = reqData.CustomerUPN;
+                SubFunction.updateMessage(lstStatusCommand, queryusn + "Get ModelName & ModelFamily ,Used time(ms):" + ts.Milliseconds);
+                SubFunction.updateMessage(lstStatusCommand, queryusn + " Model:" + reqData.Model);
+                SubFunction.updateMessage(lstStatusCommand, queryusn + " MBPN:" + reqData.CustomerUPN);
+                SubFunction.saveLog(Param.logType.SYSLOG.ToString(), queryusn + "Get ModelName & ModelFamily ,Used time(ms):" + ts.Milliseconds);
+                SubFunction.saveLog(Param.logType.SYSLOG.ToString(), queryusn + " Model:" + reqData.Model);
+                SubFunction.saveLog(Param.logType.SYSLOG.ToString(), queryusn + " MBPN:" + reqData.CustomerUPN);
+
+                                
+            }
+            else
+            {
+                SubFunction.updateMessage(lstStatusCommand,"Get ModelName & ModelFamily Fail," + "Used time(ms):" + ts.Milliseconds);
+                SubFunction.saveLog(Param.logType.SYSLOG.ToString(), "Get ModelName & ModelFamily Fail," + "Used time(ms):" + ts.Milliseconds);
+                SubFunction.saveLog(Param.logType.SYSLOG.ToString(), "Get ModelName & ModelFamily Fail," + "Used time(ms):" + ts.Milliseconds);
+                
+            }
+
+
+        }
+        
+
+
+
+
+
 
         /// <summary>
         /// 检查USN站別是否在当前站別,在为true，不在为false
@@ -3698,8 +3769,7 @@ namespace FICT_2._0_Duplex_Panel
         }
 
         private void btnStart_Click(object sender, EventArgs e)
-        {     
-
+        {
             SubFunction.updateMessage(lstStatusCommand, "手动点击 <开始> 按钮");
             SubFunction.saveLog(Param.logType.SYSLOG.ToString(), "手动点击 <开始> 按钮");
             settime();//更新系统时间
