@@ -63,7 +63,8 @@ namespace FICT_2._0_Duplex_Panel
         string dataBaseStatus = "OK"; //数据库的状态，OK，正常测试，需等待FICT动作，NG，收到数据立即回傳，FICT无动作
 
         //web
-        PcbWeb.WebService ws = new PcbWeb.WebService();
+        //PcbWeb.WebService ws = new PcbWeb.WebService(); //172.0.1.172
+        PCB_WEB.WebService ws = new PCB_WEB.WebService(); //10.62.201.100 
         string[] TrnDatas = new string[1];
 
         //
@@ -1415,9 +1416,45 @@ namespace FICT_2._0_Duplex_Panel
         /// </summary>
         /// <param name="website">webservice site </param>
         /// <param name="queryusn">query sn </param>
-        private void getDoubleMBSN(string website, string queryusn)
+        private void getDoubleMBSN(string queryusn)
         {
-           
+
+            Stopwatch sw = new Stopwatch();
+            TimeSpan ts = new TimeSpan();
+            sw.Start();
+            SubFunction.updateMessage(lstStatusCommand, "根據USN:" + queryusn + ",開始從系統獲取雙連板條碼");
+            SubFunction.saveLog(Param.logType.SYSLOG.ToString(), "根據USN:" + queryusn + ",開始從系統獲取雙連板條碼");
+            string result= string.Empty ;            
+            string[] Bar = ws.GetLinkUSN(queryusn, ref result);
+            //MessageBox.Show(result);
+            sw.Stop();
+            ts = sw.Elapsed;
+
+            if (result == "OK")
+            {
+                if( Bar.Length ==2)
+                {
+                    Param.bar_A = Bar[0];
+                    Param.bar_B = Bar[1];
+                    SubFunction.updateMessage(lstStatusCommand,"獲取系統雙連板成功," + "Used time(ms):" + ts.Milliseconds);
+                    SubFunction.saveLog(Param.logType.SYSLOG.ToString(), "獲取系統雙連板成功," + "Used time(ms):" + ts.Milliseconds);
+                    SubFunction.updateMessage(lstStatusCommand, "從SFCS獲取條碼,Bar_A:" + Param.bar_A);
+                    SubFunction.updateMessage(lstStatusCommand, "從SFCS獲取條碼,Bar_B:" + Param.bar_B);
+                    SubFunction.saveLog(Param.logType.SYSLOG.ToString(), "從SFCS獲取條碼,Bar_A:" + Param.bar_A);
+                    SubFunction.saveLog(Param.logType.SYSLOG.ToString(), "從SFCS獲取條碼,Bar_B:" + Param.bar_B);
+
+                }
+            }
+            else
+            {
+                Param.bar_A = Bar[0];
+                Param.bar_B = Bar[1];
+                SubFunction.updateMessage(lstStatusCommand, "獲取系統雙連板失敗," + "Used time(ms):" + ts.Milliseconds);
+                SubFunction.saveLog(Param.logType.SYSLOG.ToString(), "獲取系統雙連板失敗," + "Used time(ms):" + ts.Milliseconds);
+                SubFunction.updateMessage(lstStatusCommand, "獲取系統雙連板失敗," + result);
+                SubFunction.saveLog(Param.logType.SYSLOG.ToString(), "獲取系統雙連板失敗," + result);
+
+            }
 
         }
 
@@ -1441,8 +1478,10 @@ namespace FICT_2._0_Duplex_Panel
             sw.Start();
             SubFunction.updateMessage(lstStatusCommand, "SFCS:" + queryusn  + ",get ModelName & ModelFamily.");
             SubFunction.saveLog(Param.logType.SYSLOG.ToString(), "SFCS:" + queryusn + ",get ModelName & ModelFamily.");
-            PcbWeb.clsRequestData reqData = new PcbWeb.clsRequestData();
+            //PcbWeb.clsRequestData reqData = new PcbWeb.clsRequestData();
+            PCB_WEB.clsRequestData reqData = new PCB_WEB.clsRequestData();
             reqData = ws.GetUUTData(queryusn, "TD", reqData, 1);
+           
             
             sw.Stop();
             ts = sw.Elapsed;
@@ -1528,8 +1567,10 @@ namespace FICT_2._0_Duplex_Panel
             TimeSpan ts = new TimeSpan();
             sw.Start();
             string result = string.Empty;
-            PcbWeb.clsInfoNameValue[] info = new PcbWeb.clsInfoNameValue[2];
+            //PcbWeb.clsInfoNameValue[] info = new PcbWeb.clsInfoNameValue[2];
+            PCB_WEB.clsInfoNameValue[] info = new PCB_WEB.clsInfoNameValue[2];
             result = ws.GetKeyInfoFromView(usn, stage, "7", ref info);
+           
 
             if (result != "OK")
             {
@@ -1704,7 +1745,7 @@ namespace FICT_2._0_Duplex_Panel
                     errorcode = "CM00"; //快取記憶體功能不良
                     break;
                 case "STNG":   //start ng
-                    errorcode = "NO00"; //系統无法开机
+                    errorcode = "NP00"; //系統无法开机
                     break;
                 case "TMOU": //time out
                     errorcode = "SH00"; //档机
@@ -3017,7 +3058,9 @@ namespace FICT_2._0_Duplex_Panel
             sw.Start();
 
             string result = string.Empty;
-            PcbWeb.clsRequestData rd = new PcbWeb.clsRequestData();
+            //PcbWeb.clsRequestData rd = new PcbWeb.clsRequestData();
+            PCB_WEB.clsRequestData rd = new PCB_WEB.clsRequestData();
+
             rd = ws.GetUUTData(usn, "TD", rd, 1);
             if (rd.Result != "OK")
             {
@@ -3677,6 +3720,7 @@ namespace FICT_2._0_Duplex_Panel
 
         private void comboBarcodeType_SelectedIndexChanged(object sender, EventArgs e)
         {
+            
             Param.BarcodeType = this.comboBarcodeType.Text.Trim();
             IniFile.IniWriteValue("SysConfig", "BarcodeType", Param.BarcodeType, @Param.IniFilePath);
         }
@@ -3776,6 +3820,20 @@ namespace FICT_2._0_Duplex_Panel
 
         private void btnStart_Click(object sender, EventArgs e)
         {
+
+
+            //getDoubleMBSN("CN0J1P78WSC0074101C8A01");
+            //string tempBar = Param.bar_A;
+            //Param.bar_A = Param.bar_B;
+            //Param.bar_B = tempBar;
+            //SubFunction.updateMessage(lstStatusCommand, "當前機種為" + esModel + ",治具定義條碼和系統定義條碼不一致，需要交換");
+            //SubFunction.updateMessage(lstStatusCommand, "交換后條碼Bar_A:" + Param.bar_A);
+            //SubFunction.updateMessage(lstStatusCommand, "交換后條碼Bar_B:" + Param.bar_B);
+            //SubFunction.saveLog(Param.logType.SYSLOG.ToString(), "當前機種為" + esModel + ",治具定義條碼和系統定義條碼不一致，需要交換");
+            //SubFunction.saveLog(Param.logType.SYSLOG.ToString(), "交換后條碼Bar_A:" + Param.bar_A);
+            //SubFunction.saveLog(Param.logType.SYSLOG.ToString(), "交換后條碼Bar_B:" + Param.bar_B);
+            //return;
+
             SubFunction.updateMessage(lstStatusCommand, "手动点击 <开始> 按钮");
             SubFunction.saveLog(Param.logType.SYSLOG.ToString(), "手动点击 <开始> 按钮");
             settime();//更新系统时间
@@ -4681,8 +4739,17 @@ namespace FICT_2._0_Duplex_Panel
                             getModelNameInfo(USN, out modelName, out modelPN);
                             if (modelName.ToUpper().Trim() == esModel.ToUpper())
                             {
-
-
+                               getDoubleMBSN(USN); //從系統獲取真實的條碼
+                               //KS13_CHR要交換
+                               string tempBar = Param.bar_A;
+                               Param.bar_A = Param.bar_B;
+                               Param.bar_B = tempBar;
+                               SubFunction.updateMessage(lstStatusCommand, "當前機種為" + esModel + ",治具定義條碼和系統定義條碼不一致，需要交換");
+                               SubFunction.updateMessage(lstStatusCommand, "交換后條碼Bar_A:" + Param.bar_A);
+                               SubFunction.updateMessage(lstStatusCommand, "交換后條碼Bar_B:" + Param.bar_B);
+                               SubFunction.saveLog (Param.logType.SYSLOG .ToString (), "當前機種為" + esModel + ",治具定義條碼和系統定義條碼不一致，需要交換");
+                               SubFunction.saveLog(Param.logType.SYSLOG.ToString(), "交換后條碼Bar_A:" + Param.bar_A);
+                               SubFunction .saveLog (Param.logType.SYSLOG .ToString (),"交換后條碼Bar_B:" + Param.bar_B);
 
 
                             }
