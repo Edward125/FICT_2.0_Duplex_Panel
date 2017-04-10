@@ -26,20 +26,20 @@ namespace FICT_2._0_Duplex_Panel.Properties {
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.WebServiceUrl)]
-        [global::System.Configuration.DefaultSettingValueAttribute("http://172.0.1.172/Tester.WebService/WebService.asmx")]
-        public string FICT_2_0_Duplex_Panel_PcbWeb_WebService {
+        [global::System.Configuration.DefaultSettingValueAttribute("http://10.62.201.100/Tester.WebService/WebService.asmx")]
+        public string FICT_2_0_Duplex_Panel_PCB_WEB_WebService {
             get {
-                return ((string)(this["FICT_2_0_Duplex_Panel_PcbWeb_WebService"]));
+                return ((string)(this["FICT_2_0_Duplex_Panel_PCB_WEB_WebService"]));
             }
         }
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.WebServiceUrl)]
-        [global::System.Configuration.DefaultSettingValueAttribute("http://10.62.201.100/Tester.WebService/WebService.asmx")]
-        public string FICT_2_0_Duplex_Panel_PCB_WEB_WebService {
+        [global::System.Configuration.DefaultSettingValueAttribute("http://172.0.1.172/Tester.WebService/WebService.asmx")]
+        public string FICT_2_0_Duplex_Panel_PcbWeb_WebService {
             get {
-                return ((string)(this["FICT_2_0_Duplex_Panel_PCB_WEB_WebService"]));
+                return ((string)(this["FICT_2_0_Duplex_Panel_PcbWeb_WebService"]));
             }
         }
     }

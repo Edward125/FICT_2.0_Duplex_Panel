@@ -156,6 +156,9 @@
     <None Include="Web References\PcbWeb\clsAutoStickLabelPN.datasource">
       <DependentUpon>Reference.map</DependentUpon>
     </None>
+    <None Include="Web References\PcbWeb\clsBomPnDescription.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
     <None Include="Web References\PcbWeb\clsCA210OffsetResult.datasource">
       <DependentUpon>Reference.map</DependentUpon>
     </None>
@@ -376,13 +379,13 @@
     </WebReferenceUrl>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Web References\PcbWeb\WebService.disco" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Resources\程序标题.PNG" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Web References\PCB_WEB\WebService.disco" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Web References\PcbWeb\WebService.disco" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
